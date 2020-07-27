@@ -7,11 +7,11 @@
 #include <numeric>
 
 
-constexpr int WHITE_COLOR = 0xffffff;
-constexpr int BLACK_COLOR = 0x000000;
-constexpr int RED_COLOR = 0xff0000;
-constexpr int GREEN_COLOR = 0x00ff00;
-constexpr int BLUE_COLOR = 0x0000ff;
+constexpr int WHITE_COLOR	= 0xffffff;
+constexpr int BLACK_COLOR 	= 0x000000;
+constexpr int RED_COLOR 	= 0xff0000;
+constexpr int GREEN_COLOR 	= 0x00ff00;
+constexpr int BLUE_COLOR 	= 0x0000ff;
 
 std::tuple<int, int, int> GetColor(int color) {
     color &= WHITE_COLOR;

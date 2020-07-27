@@ -18,7 +18,7 @@ std::vector<std::vector<std::pair<int,int>>> SplitByLines(Image image) {
 
     const int max_value = *std::max_element(arr.begin(), arr.end());
     const int border = max_value * present;
-    const int minimal_line_height = 10;
+    const int minimal_line_height = 50;
 
     std::vector<bool> is_line(image.h, false);
     for (int i = 0; i < image.h; i++) {

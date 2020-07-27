@@ -9,8 +9,7 @@ std::vector<std::vector<double>> Blur(std::vector<std::vector<int>>& alpha) {
     int w = alpha.size();
     int h = w ? alpha[0].size() : 0;
     auto blur = newArray<double>(w, h);
-    int delta = 25;
-    
+    int delta = 30;
     auto sum = newArray<int>(w + delta * 2, h + delta * 2);
     for (int i = 0; i < w + delta * 2; i++) {
         for (int j = 0; j < h + delta * 2; j++) {
@@ -173,7 +172,7 @@ Image RemoveErrorPoints(Image image, int borderCount) {
 
     for (auto& [key, value] : map) {
         auto [x, y] = key;
-        if (value < borderCount || value > borderCount * 30) {
+        if (value < borderCount || value > borderCount * 100) {
             image[x][y] = WHITE_COLOR;
         } else {
             image[x][y] = BLACK_COLOR;
@@ -187,7 +186,7 @@ Image Filter(Image image) {
     int h = image.h;
     auto alpha = newArray<int>(w, h);
     int brightness = 40;
-
+    
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
             image.AddColor(x, y, brightness, brightness, brightness);
@@ -196,7 +195,9 @@ Image Filter(Image image) {
         }
     }
 
+	
     auto coefficients = Blur(alpha);
+    
     std::map<int,int> map;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
@@ -209,9 +210,12 @@ Image Filter(Image image) {
         }
     }
 
+	
     int k = 7;
     int bestResult = 1 << 29;
     auto resultImage = image;
+    
+    
     for (int i = 0; i < 10; i++) {
         auto nextMap = KMeans(map, k);
         auto currentImage = ApplyMap(image, nextMap);
@@ -222,6 +226,7 @@ Image Filter(Image image) {
         }
     }
     
+    
     map.clear();
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
@@ -229,10 +234,14 @@ Image Filter(Image image) {
         }
     }
     
+    
     int totalAmountOfPixels = w * h;
+    
+    
     double borderPresents = 0.15;
     int borderAmount = totalAmountOfPixels * borderPresents;
-
+			
+		
 
     for (auto& [key, amount] : map) {
         if (amount >= borderAmount) {
@@ -242,6 +251,7 @@ Image Filter(Image image) {
         }
     }
     resultImage = ApplyMap(resultImage, map);
+    
     resultImage = RemoveErrorPoints(resultImage, 30);
     return resultImage;
 }
